@@ -1,7 +1,7 @@
 import {OakRouter, OakContext} from "../../deps.ts";
 
 const v1Router = new OakRouter({prefix: '/v1'})
-const gameId: number = 509670
+const gameId = 509670
 let appAccessToken: undefined|string = undefined
 
 v1Router.get('/', (ctx: OakContext) => {
