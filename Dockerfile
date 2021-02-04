@@ -9,9 +9,11 @@ ADD . /deno
 RUN deno cache index.ts
 RUN deno compile --allow-net --allow-env --unstable index.ts
 
-FROM ubuntu
+FROM hayd/deno:alpine
 WORKDIR /app
 
 COPY --from=builder /deno/deno /app/deno
+
+EXPOSE 8000
 
 CMD ["./deno"]

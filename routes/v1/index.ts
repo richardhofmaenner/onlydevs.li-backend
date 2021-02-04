@@ -11,6 +11,7 @@ v1Router.get('/', (ctx: OakContext) => {
 })
 
 v1Router.get('/streams/', async (ctx: OakContext) => {
+  try {
   if (appAccessToken === undefined) {
     const result = await fetch('https://id.twitch.tv/oauth2/token' +
       `?client_id=${Deno.env.get('TWITCH_CLIENT_ID')}` +
@@ -41,7 +42,10 @@ v1Router.get('/streams/', async (ctx: OakContext) => {
     ctx.response.status = 500
     ctx.response.body = {"error": "Something went wrong while fetching the streams"}
   }
-
+  } catch (e) {
+    console.log(e)
+    ctx.response.body = {"error": "error"}
+  }
 })
 
 export default v1Router
