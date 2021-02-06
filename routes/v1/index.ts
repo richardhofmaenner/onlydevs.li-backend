@@ -5,7 +5,7 @@ import {Streams as StreamApi} from "../../helpers/twitchApi/Streams.ts";
 
 const v1Router = new OakRouter({prefix: '/v1'})
 const gameId = "509670"
-let appAccessToken: undefined|string = undefined
+let appAccessToken: undefined | string = undefined
 
 v1Router.get('/', (ctx: OakContext) => {
   ctx.response.body = {
@@ -13,9 +13,15 @@ v1Router.get('/', (ctx: OakContext) => {
   }
 })
 
-v1Router.get('/streams/', async (ctx: OakContext) => {
+v1Router.get('/streams', async (ctx: OakContext) => {
 
-  const queryParams: StreamSearchParams = <StreamSearchParams>ctx.request.url.searchParams
+  const queryParams: StreamSearchParams = {
+    limit: <number|null>ctx.request.url.searchParams.get('limit'),
+    cursor: <string|null>ctx.request.url.searchParams.get('cursor')
+  }
+
+  const limit = (queryParams.limit === null)? 20 : queryParams.limit
+  const cursor = (queryParams.cursor === null)? "": queryParams.cursor
 
   if (appAccessToken === undefined) {
     await TwitchAuth.getAccessToken()
@@ -29,14 +35,14 @@ v1Router.get('/streams/', async (ctx: OakContext) => {
   }
 
   const streamApi = new StreamApi(<string>Deno.env.get('TWITCH_CLIENT_ID'), <string>appAccessToken)
-  await streamApi.getStreamsByGameId(gameId)
-      .then((res) => {
-        ctx.response.body = res
-      })
-      .catch((error) => {
-        ctx.response.status = 500
-        ctx.response.body = {"error": error}
-      })
+  await streamApi.getStreamsByGameId(gameId, limit, cursor)
+    .then((res) => {
+      ctx.response.body = res
+    })
+    .catch((error) => {
+      ctx.response.status = 500
+      ctx.response.body = {"error": error}
+    })
 })
 
 export default v1Router
