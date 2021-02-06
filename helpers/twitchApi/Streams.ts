@@ -16,7 +16,7 @@ export class Streams {
           limit = 20
         }
 
-        let requestUrl = `https://api.twitch.tv/helix/streams?first=${limit}`
+        let requestUrl = `https://api.twitch.tv/helix/streams?first=${limit}&game_id=${gameId}`
         if (cursor !== "") {
           requestUrl += `&after=${cursor}`
         }
@@ -33,7 +33,6 @@ export class Streams {
                 })
               } else {
                 result.json().then((response) => {
-                  console.log(response)
                 })
                 reject('Something went wrong while fetching the streams')
               }

@@ -1,4 +1,4 @@
 export interface StreamSearchParams {
-  limit?: number,
-  cursor?: string
+  limit: number|null,
+  cursor: string|null
 }
