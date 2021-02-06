@@ -1,4 +1,6 @@
 import {OakRouter, OakContext} from "../../deps.ts";
+import TwitchAuth from '../../helpers/TwitchAuth.ts'
+import {StreamSearchParams} from "../../typings/StreamSearchParams.ts";
 
 const v1Router = new OakRouter({prefix: '/v1'})
 const gameId = 509670
@@ -11,22 +13,18 @@ v1Router.get('/', (ctx: OakContext) => {
 })
 
 v1Router.get('/streams/', async (ctx: OakContext) => {
-  try {
-  if (appAccessToken === undefined) {
-    const result = await fetch('https://id.twitch.tv/oauth2/token' +
-      `?client_id=${Deno.env.get('TWITCH_CLIENT_ID')}` +
-      `&client_secret=${Deno.env.get('TWITCH_CLIENT_SECRET')}` +
-      '&grant_type=client_credentials', {
-      method: 'POST'
-    });
 
-    if (result.status === 200 && result.body !== null) {
-      const response = await result.json()
-      appAccessToken = response.access_token
-    } else {
-      ctx.response.status = 500
-      ctx.response.body = {"error": "Something went wrong with getting the App Access Token"}
-    }
+  const queryParams: StreamSearchParams = <StreamSearchParams>ctx.request.url.searchParams
+
+  if (appAccessToken === undefined) {
+    await TwitchAuth.getAccessToken()
+      .then((access_token: string) => {
+        appAccessToken = access_token
+      })
+      .catch((err: string) => {
+        ctx.response.status = 500
+        ctx.response.body = {"error": err}
+      })
   }
 
   const resultGetStreams = await fetch(`https://api.twitch.tv/helix/streams?game_id=${gameId}&first=100`, {
@@ -41,10 +39,6 @@ v1Router.get('/streams/', async (ctx: OakContext) => {
   } else {
     ctx.response.status = 500
     ctx.response.body = {"error": "Something went wrong while fetching the streams"}
-  }
-  } catch (e) {
-    console.log(e)
-    ctx.response.body = {"error": "error"}
   }
 })
 
