@@ -1,9 +1,10 @@
 import {OakRouter, OakContext} from "../../deps.ts";
 import TwitchAuth from '../../helpers/TwitchAuth.ts'
 import {StreamSearchParams} from "../../typings/StreamSearchParams.ts";
+import {Streams as StreamApi} from "../../helpers/twitchApi/Streams.ts";
 
 const v1Router = new OakRouter({prefix: '/v1'})
-const gameId = 509670
+const gameId = "509670"
 let appAccessToken: undefined|string = undefined
 
 v1Router.get('/', (ctx: OakContext) => {
@@ -27,19 +28,15 @@ v1Router.get('/streams/', async (ctx: OakContext) => {
       })
   }
 
-  const resultGetStreams = await fetch(`https://api.twitch.tv/helix/streams?game_id=${gameId}&first=100`, {
-    headers: {
-      'Client-Id': `${Deno.env.get('TWITCH_CLIENT_ID')}`,
-      'Authorization': `Bearer ${appAccessToken}`
-    }
-  })
-
-  if (resultGetStreams.status === 200) {
-    ctx.response.body = await resultGetStreams.json()
-  } else {
-    ctx.response.status = 500
-    ctx.response.body = {"error": "Something went wrong while fetching the streams"}
-  }
+  const streamApi = new StreamApi(<string>Deno.env.get('TWITCH_CLIENT_ID'), <string>appAccessToken)
+  await streamApi.getStreamsByGameId(gameId)
+      .then((res) => {
+        ctx.response.body = res
+      })
+      .catch((error) => {
+        ctx.response.status = 500
+        ctx.response.body = {"error": error}
+      })
 })
 
 export default v1Router
