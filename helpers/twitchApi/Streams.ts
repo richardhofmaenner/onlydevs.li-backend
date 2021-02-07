@@ -32,8 +32,6 @@ export class Streams {
                   resolve(response)
                 })
               } else {
-                result.json().then((response) => {
-                })
                 reject('Something went wrong while fetching the streams')
               }
             })
