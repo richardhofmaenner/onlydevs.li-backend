@@ -38,4 +38,28 @@ streamsRouter.get('/', async (ctx: OakContext) => {
     })
 })
 
+streamsRouter.get('/all', async (ctx: OakContext) => {
+  if (appAccessToken === undefined) {
+    await TwitchAuth.getAccessToken()
+      .then((access_token: string) => {
+        appAccessToken = access_token
+      })
+      .catch((err: string) => {
+        ctx.response.status = 500
+        ctx.response.body = {"error": err}
+      })
+  }
+
+  const streamApi = new StreamApi(<string>Deno.env.get('TWITCH_CLIENT_ID'), <string>appAccessToken)
+  await streamApi.getAllStreamsByGameId(gameId)
+    .then((res) => {
+      ctx.response.body = {data: res}
+    })
+    .catch((error) => {
+      ctx.response.status = 500
+      ctx.response.body = {"error": error}
+    })
+
+})
+
 export default streamsRouter
