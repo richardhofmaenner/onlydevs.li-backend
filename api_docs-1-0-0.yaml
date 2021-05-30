@@ -1,0 +1,190 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: 'Onlydevs.li Backend'
+  description: ''
+  contact:
+    name: Richard Hofmänner
+    email: hello@terillos.dev
+    url: https://terillos.dev
+paths:
+  /:
+    get:
+      tags:
+        - version
+      responses:
+        200:
+          description: The request was successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionInfo'
+        500:
+          $ref: '#/components/responses/errorResponse'
+  /streams/:
+    get:
+      tags:
+        - streams
+      parameters:
+        - in: query
+          schema:
+            type: string
+          name: limit
+          description: |
+            Specify how many items you want to get. Default is set to 20. Accepts numbers between 1 and 100
+          required: false
+          example: 20
+        - in: query
+          schema:
+            type: string
+          name: cursor
+          description: Cursor for pagination
+          required: false
+          example: 'eyJiIjp7IkN1cnNvciI6ImV5SnpJam8wT1RNdU5URTBOakkzT1RJNE5EazVOelVzSW1RaU9tWmhiSE5sTENKMElqcDBjblZsZlE9PSJ9LCJhIjp7IkN1cnNvciI6ImV5SnpJam96T1M0d05qQTVPRGN3TnpJMk1EZ3pNU3dpWkNJNlptRnNjMlVzSW5RaU9uUnlkV1Y5In19'
+      responses:
+        200:
+          $ref: '#/components/responses/streamSuccessResponse'
+        500:
+          $ref: '#/components/responses/errorResponse'
+
+
+servers:
+  - url: http://localhost:8000/v1
+    description: Local dev server
+  - url: https://api.onlydevs.li/v1
+    description: Production Server
+components:
+  schemas:
+    VersionInfo:
+      type: object
+      properties:
+        version:
+          type: string
+      example:
+        version: 1.0.0
+    Stream:
+      type: object
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        user_login:
+          type: string
+        user_name:
+          type: string
+        game_id:
+          type: string
+        game_name:
+          type: string
+        type:
+          type: string
+        title:
+          type: string
+        viewer_count:
+          type: number
+        started_at:
+          type: string
+        language:
+          type: string
+        thumbnail_url:
+          type: string
+        tag_ids:
+          type: array
+          items:
+            type: string
+        is_mature:
+          type: boolean
+      example:
+        id: 39425923915
+        user_id: 277624494
+        user_login: dashducks
+        user_name: DashDucks
+        game_id: 509670
+        game_name: Science & Technology
+        type: live
+        title: Ducks, Geese, Feesh & Wildlife! Oh My! !perks
+        viewer_count: 493
+        started_at: 2021-05-29T13:30:16Z
+        language: en
+        thumbnail_url: https://static-cdn.jtvnw.net/previews-ttv/live_user_dashducks-{width}x{height}.jpg
+        tag_ids: [
+            6ea6bca4-4712-4ab9-a906-e3336a9d8039,
+            e90b5f6e-4c6e-4003-885b-4d0d5adeb580,
+            3dc8f084-d886-4264-b20f-8bd5f90562b5
+        ]
+        is_mature: false
+  responses:
+    streamSuccessResponse:
+      description: 'Sample Response'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stream'
+              pagination:
+                type: object
+                properties:
+                  cursor:
+                    type: string
+          example:
+            data: [
+              {
+                "id": "42111135053",
+                "user_id": "617966516",
+                "user_login": "vector_the_robot",
+                "user_name": "vector_the_robot",
+                "game_id": "509670",
+                "game_name": "Science & Technology",
+                "type": "live",
+                "title": "Control my Anki Vector robot - type !help for a list of commands",
+                "viewer_count": 39,
+                "started_at": "2021-05-29T08:44:27Z",
+                "language": "en",
+                "thumbnail_url": "https://static-cdn.jtvnw.net/previews-ttv/live_user_vector_the_robot-{width}x{height}.jpg",
+                "tag_ids": [
+                    "6ea6bca4-4712-4ab9-a906-e3336a9d8039",
+                    "a59f1e4e-257b-4bd0-90c7-189c3efbf917",
+                    "56257f86-a66c-4ce8-af6d-89e9b1f13fed",
+                    "cea7bc0c-75a5-4446-8743-6db031b71550"
+                ],
+                "is_mature": false
+              },
+              {
+                "id": "42113207869",
+                "user_id": "40263072",
+                "user_login": "rofell0s",
+                "user_name": "Rofell0s",
+                "game_id": "509670",
+                "game_name": "Science & Technology",
+                "type": "live",
+                "title": "🔴 HackTheBox | Cyber Samedi - Apprentissage Part 3",
+                "viewer_count": 39,
+                "started_at": "2021-05-29T13:19:25Z",
+                "language": "fr",
+                "thumbnail_url": "https://static-cdn.jtvnw.net/previews-ttv/live_user_rofell0s-{width}x{height}.jpg",
+                "tag_ids": [
+                    "6f655045-9989-4ef7-8f85-1edcec42d648"
+                ],
+                "is_mature": true
+              }
+            ]
+            pagination:
+              cursor: eyJiIjp7IkN1cnNvciI6ImV5SnpJam8wT1RNdU5URTBOakkzT1RJNE5EazVOelVzSW1RaU9tWmhiSE5sTENKMElqcDBjblZsZlE9PSJ9LCJhIjp7IkN1cnNvciI6ImV5SnpJam96T1M0d05qQTVPRGN3TnpJMk1EZ3pNU3dpWkNJNlptRnNjMlVzSW5RaU9uUnlkV1Y5In19
+    errorResponse:
+      description: Response when an server error happens.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+          example:
+            {
+              error: 'Some error message'
+            }
