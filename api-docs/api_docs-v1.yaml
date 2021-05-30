@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 1.0.0
+  version: 1.0.1
   title: 'Onlydevs.li Backend'
   description: ''
   contact:
@@ -44,6 +44,15 @@ paths:
       responses:
         200:
           $ref: '#/components/responses/streamSuccessResponse'
+        500:
+          $ref: '#/components/responses/errorResponse'
+  /streams/all:
+    get:
+      tags:
+        - streams
+      responses:
+        200:
+          $ref: '#/components/responses/streamAllSuccessResponse'
         500:
           $ref: '#/components/responses/errorResponse'
 
@@ -175,6 +184,59 @@ components:
             ]
             pagination:
               cursor: eyJiIjp7IkN1cnNvciI6ImV5SnpJam8wT1RNdU5URTBOakkzT1RJNE5EazVOelVzSW1RaU9tWmhiSE5sTENKMElqcDBjblZsZlE9PSJ9LCJhIjp7IkN1cnNvciI6ImV5SnpJam96T1M0d05qQTVPRGN3TnpJMk1EZ3pNU3dpWkNJNlptRnNjMlVzSW5RaU9uUnlkV1Y5In19
+    streamAllSuccessResponse:
+      description: 'Sample Response'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stream'
+          example:
+            data: [
+              {
+                "id": "42111135053",
+                "user_id": "617966516",
+                "user_login": "vector_the_robot",
+                "user_name": "vector_the_robot",
+                "game_id": "509670",
+                "game_name": "Science & Technology",
+                "type": "live",
+                "title": "Control my Anki Vector robot - type !help for a list of commands",
+                "viewer_count": 39,
+                "started_at": "2021-05-29T08:44:27Z",
+                "language": "en",
+                "thumbnail_url": "https://static-cdn.jtvnw.net/previews-ttv/live_user_vector_the_robot-{width}x{height}.jpg",
+                "tag_ids": [
+                    "6ea6bca4-4712-4ab9-a906-e3336a9d8039",
+                    "a59f1e4e-257b-4bd0-90c7-189c3efbf917",
+                    "56257f86-a66c-4ce8-af6d-89e9b1f13fed",
+                    "cea7bc0c-75a5-4446-8743-6db031b71550"
+                ],
+                "is_mature": false
+              },
+              {
+                "id": "42113207869",
+                "user_id": "40263072",
+                "user_login": "rofell0s",
+                "user_name": "Rofell0s",
+                "game_id": "509670",
+                "game_name": "Science & Technology",
+                "type": "live",
+                "title": "🔴 HackTheBox | Cyber Samedi - Apprentissage Part 3",
+                "viewer_count": 39,
+                "started_at": "2021-05-29T13:19:25Z",
+                "language": "fr",
+                "thumbnail_url": "https://static-cdn.jtvnw.net/previews-ttv/live_user_rofell0s-{width}x{height}.jpg",
+                "tag_ids": [
+                    "6f655045-9989-4ef7-8f85-1edcec42d648"
+                ],
+                "is_mature": true
+              }
+            ]
     errorResponse:
       description: Response when an server error happens.
       content:

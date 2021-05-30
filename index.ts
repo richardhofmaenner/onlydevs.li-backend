@@ -1,4 +1,4 @@
-import { OakApp, OakContext } from "./deps.ts"
+import { OakApp } from "./deps.ts"
 import v1Router from "./routes/v1/index.ts"
 import streamsRouter from "./routes/v1/streams.ts";
 
