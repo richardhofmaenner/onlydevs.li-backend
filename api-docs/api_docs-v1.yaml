@@ -86,7 +86,6 @@ paths:
         500:
           $ref: '#/components/responses/errorResponse'
 
-
 servers:
   - url: http://localhost:8000/v1
     description: Local dev server

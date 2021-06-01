@@ -41,7 +41,6 @@ export class Streams {
       }
     })
   }
-
   getAllStreamsByGameId(gameId: string): Promise<Stream[]> {
     // deno-lint-ignore no-async-promise-executor
     return new Promise(async (resolve, reject) => {
