@@ -1,3 +1,5 @@
+import { TagDetailResponse } from "../../typings/TagDetailResponse.ts";
+
 export class Tag {
   private readonly clientId: string
   private readonly appAccessToken: string
@@ -7,7 +9,7 @@ export class Tag {
     this.appAccessToken = appAccessToken
   }
 
-  getInfoById(id: string): Promise<any> {
+  getInfoById(id: string): Promise<TagDetailResponse> {
     return new Promise((resolve, reject) => {
       const requestUrl = `https://api.twitch.tv/helix/tags/streams?tag_id=${id}`
 
@@ -19,14 +21,15 @@ export class Tag {
       })
         .then((result) => {
           if (result.status === 200 && result.body !== null) {
-            result.json().then((response) => {
-              resolve(response)
+            result.json()
+              .then((response: TagDetailResponse) => {
+                resolve(response)
             })
           } else {
             reject('Something went wrong while fetching the tag')
           }
         })
-        .catch((error) => {
+        .catch(() => {
           reject('Something went wrong while fetching the tag')
         })
     })

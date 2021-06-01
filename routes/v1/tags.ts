@@ -1,4 +1,4 @@
-import {OakRouter, OakContext} from "../../deps.ts";
+import {OakRouter} from "../../deps.ts";
 import { Tag } from "../../helpers/twitchApi/Tag.ts";
 import TwitchAuth from "../../helpers/TwitchAuth.ts";
 
@@ -21,8 +21,14 @@ tagsRouter.get('/:id', async (ctx) => {
 
   const tag = new Tag(<string>Deno.env.get('TWITCH_CLIENT_ID'), <string>appAccessToken)
   const res = await tag.getInfoById(<string>ctx.params.id)
-  ctx.response.body = {
-    id: res.data[0]
+
+  if (res.data.length > 0) {
+    return ctx.response.body = {
+      data: res.data[0]
+    }
+  } else {
+    ctx.response.status = 404
+    ctx.response.body = {"error": 'Tag not found.'}
   }
 })
 
