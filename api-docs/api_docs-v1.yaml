@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 1.0.1
+  version: 1.1.0
   title: 'Onlydevs.li Backend'
   description: ''
   contact:
@@ -23,6 +23,7 @@ paths:
           $ref: '#/components/responses/errorResponse'
   /streams/:
     get:
+      description: Get all streams with pagination
       tags:
         - streams
       parameters:
@@ -48,6 +49,7 @@ paths:
           $ref: '#/components/responses/errorResponse'
   /streams/all:
     get:
+      description: Get all streams from the category.
       tags:
         - streams
       responses:
@@ -55,7 +57,34 @@ paths:
           $ref: '#/components/responses/streamAllSuccessResponse'
         500:
           $ref: '#/components/responses/errorResponse'
-
+  /tags/{id}:
+    get:
+      description: Get the details of a tag
+      tags:
+        - tag
+      parameters:
+        - in: path
+          schema:
+            type: string
+          name: id
+          required: true
+          example: 3dc8f084-d886-4264-b20f-8bd5f90562b5
+      responses:
+        200:
+          $ref: '#/components/responses/tagDetailSuccessResponse'
+        404:
+          description: Tag is not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Example error"
+        500:
+          $ref: '#/components/responses/errorResponse'
 
 servers:
   - url: http://localhost:8000/v1
@@ -123,6 +152,194 @@ components:
             3dc8f084-d886-4264-b20f-8bd5f90562b5
         ]
         is_mature: false
+    Tag:
+      type: object
+      properties:
+        tag_id:
+          type: string
+        is_auto:
+          type: boolean
+        localization_names:
+          type: object
+          properties:
+            bg-bg:
+              type: string
+            cs-cz:
+              type: string
+            da-dk:
+              type: string
+            de-de:
+              type: string
+            el-gr:
+              type: string
+            en-us:
+              type: string
+            es-es:
+              type: string
+            es-mx:
+              type: string
+            fi-fi:
+              type: string
+            fr-fr:
+              type: string
+            hu-hu:
+              type: string
+            it-it:
+              type: string
+            ja-jp:
+              type: string
+            ko-kr:
+              type: string
+            nl-nl:
+              type: string
+            no-no:
+              type: string
+            pl-pl:
+              type: string
+            pt-br:
+              type: string
+            pt-pt:
+              type: string
+            ro-ro:
+              type: string
+            ru-ru:
+              type: string
+            sk-sk:
+              type: string
+            sv-se:
+              type: string
+            th-th:
+              type: string
+            tr-tr:
+              type: string
+            vi-vn:
+              type: string
+            zh-cn:
+              type: string
+            zh-tw:
+              type: string
+        localization_descriptions:
+          type: object
+          properties:
+            bg-bg:
+              type: string
+            cs-cz:
+              type: string
+            da-dk:
+              type: string
+            de-de:
+              type: string
+            el-gr:
+              type: string
+            en-us:
+              type: string
+            es-es:
+              type: string
+            es-mx:
+              type: string
+            fi-fi:
+              type: string
+            fr-fr:
+              type: string
+            hu-hu:
+              type: string
+            it-it:
+              type: string
+            ja-jp:
+              type: string
+            ko-kr:
+              type: string
+            nl-nl:
+              type: string
+            no-no:
+              type: string
+            pl-pl:
+              type: string
+            pt-br:
+              type: string
+            pt-pt:
+              type: string
+            ro-ro:
+              type: string
+            ru-ru:
+              type: string
+            sk-sk:
+              type: string
+            sv-se:
+              type: string
+            th-th:
+              type: string
+            tr-tr:
+              type: string
+            vi-vn:
+              type: string
+            zh-cn:
+              type: string
+            zh-tw:
+              type: string
+      example:
+        tag_id: 621fb5bf-5498-4d8f-b4ac-db4d40d401bf
+        is_auto: false
+        localization_names: {
+          bg-bg: Изчистване на 1 кредит,
+          cs-cz: 1 čistý kredit,
+          da-dk: 1 credit klaret,
+          de-de: Mit 1 Leben abschließen,
+          el-gr: 1 μόνο πίστωση,
+          en-us: 1 Credit Clear,
+          es-es: Sin continuaciones,
+          es-mx: Completar con 1 crédito,
+          fi-fi: Läpäisy ilman jatkamisia,
+          fr-fr: 1 seul continue,
+          hu-hu: 1 kredit rendben,
+          it-it: Completamento con un solo tentativo,
+          ja-jp: 1クレジットクリア,
+          ko-kr: 원코인 클리어,
+          nl-nl: Voltooien met 1 credit,
+          no-no: Fullført på ett forsøk,
+          pl-pl: Za 1 kredyt,
+          pt-br: Zerado com 1 crédito,
+          pt-pt: Terminar em 1 crédito,
+          ro-ro: 1 credit eliminat,
+          ru-ru: Прохождение с одной попытки,
+          sk-sk: 1 čistý kredit,
+          sv-se: Klara utan att använda Continue,
+          th-th: เล่นจบด้วย 1 เครดิต,
+          tr-tr: Tek Kredi Yeter,
+          vi-vn: Chơi thắng chỉ cần 1 xèng,
+          zh-cn: 一命通关,
+          zh-tw: 一命通關
+        }
+        localization_descriptions: {
+          bg-bg: За потоци с акцент върху завършване на аркадна игра с монети, в която не се използва продължаване,
+          cs-cz: Pro vysílání s důrazem na plnění mincových arkádových her bez použití pokračování.,
+          da-dk: Til streams med vægt på at gennemføre et arkadespil uden at bruge continues,
+          de-de: Für Streams mit dem Ziel, ein Coin-op-Arcade-Game mit nur einem Leben abzuschließen.,
+          el-gr: Για μεταδόσεις με έμφαση στην ολοκλήρωση παλαιού τύπου ηλεκτρονικών παιχνιδιών που λειτουργούν με κέρμα, χωρίς να χρησιμοποιούν συνέχειες,
+          en-us: For streams with an emphasis on completing a coin-op arcade game without using any continues,
+          es-es: Para transmisiones centradas en completar un juego arcade de monedas sin usar continuaciones.,
+          es-mx: Para streams centrados en completar un juego de arcade operado con monedas sin usar ningún continuar.,
+          fi-fi: Lähetyksille, joissa pyritään läpäisemään kolikkopeli käyttämättä jatkamismahdollisuutta.,
+          fr-fr: Pour les streams dont l’objet principal est de terminer un jeu d’arcade sans utiliser le moindre Continue,
+          hu-hu: Pénzbedobós játéktermi játékok folytatás nélküli teljesítésével kapcsolatos közvetítésekhez,
+          it-it: Per streaming in cui si gioca cercando di completare un gioco arcade con un solo credito,
+          ja-jp: コイン投入式のアーケードゲームを、コンティニューを使用せずにクリアすることを主眼とする配信に使われます,
+          ko-kr: 동전 투입식 아케이드 게임에서 이어 하기를 사용하지 않고 완료하는 걸 주로 다루는 방송,
+          nl-nl: Voor streams met een nadruk op het voltooien van een speelhalgame, zonder gebruik te maken van \continues\,
+          no-no: For kringkastinger med en fokus på fullføring av arkadespill uten bruk av flere forsøk (Continues),
+          pl-pl: Dla streamów skupiających się na ukończeniu automatowej gry zręcznościowej bez korzystania z możliwości kontynuacji,
+          pt-br: Para transmissões focadas na conclusão de um título de fliperama com ficha sem o uso de qualquer continue.,
+          pt-pt: Para transmissões com ênfase em completar um jogo de arcada a moedas sem usar nenhum \continue\.,
+          ro-ro: Pentru redări în flux cu accent pe terminarea unui joc mecanic cu fise fără a folosi continuarea,
+          ru-ru: Трансляции, во время которых стример старается пройти игру на жетонном аркадном автомате с одной попытки,
+          sk-sk: Pre streamy s dôrazom na dokončenie mincovej arkádovej hry bez použitia \pokračovaní\,
+          sv-se: För streamar med fokus på att klara ett arkadspel med myntinkast utan att använda continues,
+          th-th: สำหรับสตรีมที่ให้ความสำคัญกับการเล่นเกมตู้หยอดเหรียญจนจบโดยไม่คอนทินิวเลย,
+          tr-tr: Jetonlu bir arkad oyununu tek jetonla tamamlamak için oynamaya odaklı yayınlar için,
+          vi-vn: Dành cho chương trình truyền trực tiếp nhấn mạnh vào việc hoàn thành một game giải trí trên máy nạp xu mà không cần sử dụng lượt chơi tiếp theo,
+          zh-cn: 直播内容主要是以不续关为目标完成投币式街机游戏通关,
+          zh-tw: 以不續關就完成投幣式街機遊戲通關為目標的實況
+        }
   responses:
     streamSuccessResponse:
       description: 'Sample Response'
@@ -250,3 +467,14 @@ components:
             {
               error: 'Some error message'
             }
+    tagDetailSuccessResponse:
+      description: Response with the details of a tag
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'

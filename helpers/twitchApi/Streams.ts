@@ -1,4 +1,5 @@
 import {Stream} from "../../typings/Stream.ts";
+import { StreamsDetailResponse } from "../../typings/StreamsDetailResponse.ts";
 
 export class Streams {
   private readonly clientId: string
@@ -9,7 +10,7 @@ export class Streams {
     this.appAccessToken = appAccessToken
   }
 
-  getStreamsByGameId(gameId: string, limit = 20, cursor = ""): Promise<any> {
+  getStreamsByGameId(gameId: string, limit = 20, cursor = ""): Promise<StreamsDetailResponse> {
     return new Promise((resolve, reject) => {
       try {
         if (limit > 100) {
@@ -28,7 +29,7 @@ export class Streams {
         })
             .then((result) => {
               if (result.status === 200 && result.body !== null) {
-                result.json().then((response) => {
+                result.json().then((response: StreamsDetailResponse) => {
                   resolve(response)
                 })
               } else {
@@ -40,13 +41,13 @@ export class Streams {
       }
     })
   }
-
-  getAllStreamsByGameId(gameId: string): Promise<any> {
+  getAllStreamsByGameId(gameId: string): Promise<Stream[]> {
+    // deno-lint-ignore no-async-promise-executor
     return new Promise(async (resolve, reject) => {
       try {
         let cursor = ""
-        let requestUrl = `https://api.twitch.tv/helix/streams?first=100&game_id=${gameId}${cursor !== ""? "&after=" + cursor : ""}`
-        let streams: Stream[] = []
+        const requestUrl = `https://api.twitch.tv/helix/streams?first=100&game_id=${gameId}${cursor !== ""? "&after=" + cursor : ""}`
+        const streams: Stream[] = []
 
         do {
           const result = await fetch(requestUrl, {
